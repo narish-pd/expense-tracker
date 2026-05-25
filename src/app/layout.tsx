@@ -17,6 +17,15 @@ export const metadata: Metadata = {
   title: "Expense Tracker",
   description: "บันทึกรายรับรายจ่าย PWA",
   manifest: "/manifest.json",
+  applicationName: "Expense Tracker",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Expense Tracker",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const viewport: Viewport = {
@@ -38,6 +47,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+      </head>
       <body className="min-h-full bg-background text-foreground">
         <AppShell>{children}</AppShell>
       </body>
