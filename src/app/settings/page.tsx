@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Moon, Sun, Download, Upload, Wallet, FileText } from "lucide-react";
+import { Moon, Sun, Download, Upload, Wallet, FileText, Tags, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useTransactionStore, Budget } from "@/store/transaction-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -125,6 +126,21 @@ export default function SettingsPage() {
       <h1 className="mb-6 text-2xl font-bold">ตั้งค่า</h1>
 
       <div className="space-y-4">
+        {/* Categories */}
+        <Link
+          href="/categories"
+          className="flex w-full items-center gap-3 rounded-xl border p-4 hover:bg-muted/50 transition-colors"
+        >
+          <Tags size={20} />
+          <div className="flex-1">
+            <p className="font-medium">จัดการหมวดหมู่</p>
+            <p className="text-xs text-muted-foreground">
+              เพิ่ม ลบ แก้ไข หมวดหมู่รายรับรายจ่าย
+            </p>
+          </div>
+          <ChevronRight size={18} className="text-muted-foreground" />
+        </Link>
+
         {/* Dark Mode */}
         <div className="flex items-center justify-between rounded-xl border p-4">
           <div className="flex items-center gap-3">

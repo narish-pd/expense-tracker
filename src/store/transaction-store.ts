@@ -36,6 +36,7 @@ type Store = {
   removeTransaction: (id: string) => void;
 
   addCategory: (category: Category) => void;
+  updateCategory: (id: string, data: Partial<Omit<Category, "id">>) => void;
   removeCategory: (id: string) => void;
 
   setBudget: (budget: Budget) => void;
@@ -65,6 +66,13 @@ export const useTransactionStore = create<Store>()(
       addCategory: (category) =>
         set((state) => ({
           categories: [...state.categories, category],
+        })),
+
+      updateCategory: (id, data) =>
+        set((state) => ({
+          categories: state.categories.map((c) =>
+            c.id === id ? { ...c, ...data } : c
+          ),
         })),
 
       removeCategory: (id) =>
