@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Sheet,
   SheetContent,
@@ -11,16 +11,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTransactionStore } from "@/store/transaction-store";
 import { TransactionType } from "@/types/transaction";
+import { format } from "date-fns";
+import { th } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 interface AddTransactionSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  defaultDate?: Date;
 }
 
 export function AddTransactionSheet({
   open,
   onOpenChange,
+  defaultDate,
 }: AddTransactionSheetProps) {
   const { categories, addTransaction } = useTransactionStore();
   const [type, setType] = useState<TransactionType>("expense");
@@ -28,7 +32,17 @@ export function AddTransactionSheet({
   const [categoryId, setCategoryId] = useState("");
   const [note, setNote] = useState("");
 
+  useEffect(() => {
+    if (!open) {
+      setAmount("");
+      setCategoryId("");
+      setNote("");
+    }
+  }, [open]);
+
   const filteredCategories = categories.filter((c) => c.type === type);
+
+  const selectedDate = defaultDate || new Date();
 
   const handleSubmit = () => {
     const numAmount = parseFloat(amount);
@@ -40,7 +54,7 @@ export function AddTransactionSheet({
       type,
       categoryId,
       note: note || undefined,
-      createdAt: new Date().toISOString(),
+      createdAt: selectedDate.toISOString(),
     });
 
     setAmount("");
@@ -53,7 +67,12 @@ export function AddTransactionSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="rounded-t-3xl px-4 pb-8">
         <SheetHeader className="pb-2">
-          <SheetTitle>เพิ่มรายการ</SheetTitle>
+          <SheetTitle className="flex items-center gap-2">
+            เพิ่มรายการ
+            <span className="text-sm font-normal text-muted-foreground">
+              — {format(selectedDate, "d MMM yyyy", { locale: th })}
+            </span>
+          </SheetTitle>
         </SheetHeader>
 
         <div className="space-y-4">
@@ -96,7 +115,7 @@ export function AddTransactionSheet({
           </div>
 
           {/* Category Grid */}
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-2 max-h-36 overflow-y-auto">
             {filteredCategories.map((cat) => (
               <button
                 key={cat.id}

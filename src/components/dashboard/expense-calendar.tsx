@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import {
   format,
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
-  isSameDay,
   addMonths,
   subMonths,
   getDay,
   isToday,
+  isSameDay,
 } from "date-fns";
 import { th } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -18,8 +18,19 @@ import { useTransactionStore } from "@/store/transaction-store";
 import { formatCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 
-export function ExpenseCalendar() {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+interface ExpenseCalendarProps {
+  selectedDay: Date;
+  onSelectDay: (day: Date) => void;
+  currentMonth: Date;
+  onMonthChange: (month: Date) => void;
+}
+
+export function ExpenseCalendar({
+  selectedDay,
+  onSelectDay,
+  currentMonth,
+  onMonthChange,
+}: ExpenseCalendarProps) {
   const { transactions } = useTransactionStore();
 
   const days = useMemo(() => {
@@ -69,7 +80,7 @@ export function ExpenseCalendar() {
       {/* Month Selector */}
       <div className="mb-4 flex items-center justify-between">
         <button
-          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+          onClick={() => onMonthChange(subMonths(currentMonth, 1))}
           className="rounded-lg p-2 hover:bg-muted"
         >
           <ChevronLeft size={20} />
@@ -83,7 +94,7 @@ export function ExpenseCalendar() {
           </p>
         </div>
         <button
-          onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+          onClick={() => onMonthChange(addMonths(currentMonth, 1))}
           className="rounded-lg p-2 hover:bg-muted"
         >
           <ChevronRight size={20} />
@@ -109,19 +120,23 @@ export function ExpenseCalendar() {
           const expense = dailyExpenses.get(key) || 0;
           const intensity =
             maxDailyExpense > 0 ? expense / maxDailyExpense : 0;
+          const isSelected = isSameDay(day, selectedDay);
 
           return (
-            <div
+            <button
               key={key}
+              onClick={() => onSelectDay(day)}
               className={cn(
-                "relative flex flex-col items-center rounded-lg p-1 text-xs",
-                isToday(day) && "ring-2 ring-primary"
+                "relative flex flex-col items-center rounded-lg p-1 text-xs transition-colors active:scale-95",
+                isSelected && "bg-primary/10 ring-2 ring-primary",
+                !isSelected && isToday(day) && "ring-1 ring-muted-foreground/30",
+                !isSelected && "hover:bg-muted/60"
               )}
             >
               <span
                 className={cn(
                   "text-[11px]",
-                  isToday(day) ? "font-bold" : "text-foreground"
+                  isSelected ? "font-bold text-primary" : isToday(day) ? "font-bold" : "text-foreground"
                 )}
               >
                 {format(day, "d")}
@@ -141,7 +156,7 @@ export function ExpenseCalendar() {
                     : expense.toFixed(0)}
                 </span>
               )}
-            </div>
+            </button>
           );
         })}
       </div>
