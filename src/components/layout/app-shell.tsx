@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { BottomNav } from "./bottom-nav";
 import { AddTransactionSheet } from "./add-transaction-sheet";
+import { PwaInstallPrompt } from "./pwa-install-prompt";
 import { useTransactionStore } from "@/store/transaction-store";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -33,6 +34,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         onOpenChange={setAddOpen}
         defaultDate={addDate}
       />
+      <PwaInstallPrompt />
     </AppShellContext.Provider>
   );
 }
