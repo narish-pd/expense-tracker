@@ -56,7 +56,7 @@
 - ติดตั้งบนมือถือ (Add to Home Screen / Install app)
 - **แบนเนอร์ติดตั้ง** (`PwaInstallPrompt`) เมื่อเข้าจากมือถือในเบราว์เซอร์
   - **Android (Chrome):** ปุ่ม「ติดตั้ง」เรียก native install prompt (`beforeinstallprompt`)
-  - **iOS (Safari):** แสดงขั้นตอน Share → เพิ่มไปที่หน้าจอโฮม (Apple ไม่ให้กดติดตั้งอัตโนมัติ)
+  - **iOS (Safari):** แสดง 4 ขั้นตอน (แชร์ → เพิ่มเติม → เพิ่มไปที่หน้าจอโฮม → เพิ่ม)
   - ไม่แสดงถ้าติดตั้งแล้ว / กด「ไว้ทีหลัง」 (ซ่อน 7 วัน)
 - `manifest.json` + ไอคอน `public/icon-192x.png`, `public/icon-512x.png`
 - Service Worker (`src/app/sw.ts` → build เป็น `public/sw.js`) — ทำงานใน **production** เท่านั้น

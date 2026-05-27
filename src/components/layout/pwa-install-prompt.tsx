@@ -127,7 +127,7 @@ export function PwaInstallPrompt() {
                   1
                 </span>
                 <span className="flex items-center gap-1">
-                  กดปุ่ม <Share size={14} className="inline" /> แชร์
+                  กดปุ่ม <Share size={14} className="inline shrink-0" /> แชร์
                   ด้านล่าง Safari
                 </span>
               </li>
@@ -135,11 +135,17 @@ export function PwaInstallPrompt() {
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium">
                   2
                 </span>
-                เลือก &quot;เพิ่มไปที่หน้าจอโฮม&quot;
+                กด &quot;เพิ่มเติม&quot;
               </li>
               <li className="flex items-center gap-2">
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium">
                   3
+                </span>
+                เลือก &quot;เพิ่มไปที่หน้าจอโฮม&quot;
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium">
+                  4
                 </span>
                 กด &quot;เพิ่ม&quot; เพื่อยืนยัน
               </li>
