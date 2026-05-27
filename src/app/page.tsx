@@ -49,7 +49,7 @@ export default function HomePage() {
   return (
     <main className="mx-auto max-w-md p-4">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Expense Tracker</h1>
+        <h1 className="text-2xl font-bold">บันทึกรายรับรายจ่าย</h1>
         <p className="text-sm text-muted-foreground">
           {format(new Date(), "EEEE d MMMM yyyy", { locale: th })}
         </p>
@@ -67,13 +67,13 @@ export default function HomePage() {
         <div className="mt-5 grid grid-cols-2 gap-4">
           <div>
             <p className="text-xs opacity-70">รายรับ</p>
-            <p className="text-lg font-semibold text-green-300">
+            <p className="text-lg font-semibold text-green-500">
               +{formatCurrency(income)}
             </p>
           </div>
           <div>
             <p className="text-xs opacity-70">รายจ่าย</p>
-            <p className="text-lg font-semibold text-red-300">
+            <p className="text-lg font-semibold text-red-500">
               -{formatCurrency(expense)}
             </p>
           </div>

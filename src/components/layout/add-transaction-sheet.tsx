@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Sheet,
   SheetContent,
@@ -11,14 +11,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTransactionStore } from "@/store/transaction-store";
 import { TransactionType } from "@/types/transaction";
-import { format } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
 import { th } from "date-fns/locale";
+import { Clock, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AddTransactionSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   defaultDate?: Date;
+}
+
+function combineDateAndTime(date: Date, timeHHmm: string): Date {
+  const [hours, minutes] = timeHHmm.split(":").map(Number);
+  return setMinutes(setHours(new Date(date), hours), minutes);
 }
 
 export function AddTransactionSheet({
@@ -31,18 +37,28 @@ export function AddTransactionSheet({
   const [amount, setAmount] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [note, setNote] = useState("");
+  const [showTime, setShowTime] = useState(false);
+  const [time, setTime] = useState("12:00");
+
+  const selectedDate = defaultDate || new Date();
+  const filteredCategories = categories.filter((c) => c.type === type);
+
+  const createdAtPreview = useMemo(
+    () => combineDateAndTime(selectedDate, time),
+    [selectedDate, time]
+  );
 
   useEffect(() => {
-    if (!open) {
+    if (open) {
+      setTime(format(new Date(), "HH:mm"));
+      setShowTime(false);
+    } else {
       setAmount("");
       setCategoryId("");
       setNote("");
+      setShowTime(false);
     }
   }, [open]);
-
-  const filteredCategories = categories.filter((c) => c.type === type);
-
-  const selectedDate = defaultDate || new Date();
 
   const handleSubmit = () => {
     const numAmount = parseFloat(amount);
@@ -54,7 +70,7 @@ export function AddTransactionSheet({
       type,
       categoryId,
       note: note || undefined,
-      createdAt: selectedDate.toISOString(),
+      createdAt: combineDateAndTime(selectedDate, time).toISOString(),
     });
 
     setAmount("");
@@ -67,10 +83,10 @@ export function AddTransactionSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="rounded-t-3xl px-4 pb-8">
         <SheetHeader className="pb-2">
-          <SheetTitle className="flex items-center gap-2">
-            เพิ่มรายการ
+          <SheetTitle className="flex flex-col items-start gap-0.5">
+            <span>เพิ่มรายการ</span>
             <span className="text-sm font-normal text-muted-foreground">
-              — {format(selectedDate, "d MMM yyyy", { locale: th })}
+              {format(createdAtPreview, "d MMM yyyy HH:mm น.", { locale: th })}
             </span>
           </SheetTitle>
         </SheetHeader>
@@ -79,7 +95,10 @@ export function AddTransactionSheet({
           {/* Type Toggle */}
           <div className="grid grid-cols-2 gap-2 rounded-xl bg-muted p-1">
             <button
-              onClick={() => { setType("expense"); setCategoryId(""); }}
+              onClick={() => {
+                setType("expense");
+                setCategoryId("");
+              }}
               className={cn(
                 "rounded-lg py-2 text-sm font-medium transition-colors",
                 type === "expense"
@@ -90,7 +109,10 @@ export function AddTransactionSheet({
               รายจ่าย
             </button>
             <button
-              onClick={() => { setType("income"); setCategoryId(""); }}
+              onClick={() => {
+                setType("income");
+                setCategoryId("");
+              }}
               className={cn(
                 "rounded-lg py-2 text-sm font-medium transition-colors",
                 type === "income"
@@ -112,6 +134,38 @@ export function AddTransactionSheet({
               className="h-12 text-lg"
               inputMode="decimal"
             />
+          </div>
+
+          {/* Time picker (collapsed by default) */}
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={() => setShowTime((v) => !v)}
+              className="flex w-full items-center justify-between rounded-xl border bg-muted/30 px-3 py-2.5 text-sm transition-colors hover:bg-muted/50"
+            >
+              <span className="flex items-center gap-2">
+                <Clock size={16} className="text-muted-foreground" />
+                เลือกเวลา
+              </span>
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                <span className="tabular-nums">{time} น.</span>
+                <ChevronDown
+                  size={16}
+                  className={cn(
+                    "transition-transform",
+                    showTime && "rotate-180"
+                  )}
+                />
+              </span>
+            </button>
+            {showTime && (
+              <Input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="h-11"
+              />
+            )}
           </div>
 
           {/* Category Grid */}
