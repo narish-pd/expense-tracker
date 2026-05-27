@@ -14,14 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Expense Tracker",
+  title: "นับตังค์",
   description: "บันทึกรายรับรายจ่าย PWA",
   manifest: "/manifest.json",
-  applicationName: "Expense Tracker",
+  applicationName: "นับตังค์",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Expense Tracker",
+    title: "นับตังค์",
   },
   formatDetection: {
     telephone: false,
@@ -48,7 +48,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icon-192x.png" />
       </head>
       <body className="min-h-full bg-background text-foreground">
         <AppShell>{children}</AppShell>
