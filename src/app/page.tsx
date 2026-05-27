@@ -49,7 +49,7 @@ export default function HomePage() {
   return (
     <main className="mx-auto max-w-md p-4">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">บันทึกรายรับรายจ่าย</h1>
+        <h1 className="text-2xl font-bold">บันทึกรายรับ - รายจ่าย</h1>
         <p className="text-sm text-muted-foreground">
           {format(new Date(), "EEEE d MMMM yyyy", { locale: th })}
         </p>
